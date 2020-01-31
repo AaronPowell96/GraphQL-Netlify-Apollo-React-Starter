@@ -38,6 +38,10 @@ const books = [
   {
     title: 'Jurassic Park',
     author: 'Michael Crichton'
+  },
+  {
+    title: '1111',
+    author: 'Michael Crichton'
   }
 ];
 
@@ -75,24 +79,21 @@ const resolvers = {
     books: () => books,
     pdh: (root, { name }, context) => {
       return {
-        ...(name ? people.filter((person) => person.name === name) : people),
-        isChild: root.isChild ? 'a child' : 'an adult'
+        ...(name ? people.filter((person) => person.name === name) : people)
       };
     }
   },
   People: {
-    isChild: ({ age }, args, context) => (age < 18 ? true : false),
     description: ({ height, name, role, age }, args, context) => {
-      let isAdult = age > 10 ? 'a child' : 'an adult';
+      let isAdult = age < 18 ? 'a child' : 'an adult';
       return `${name} is ${isAdult} who is ${role} at the height of ${height}`;
     }
   }
 };
 
-console.log(process.env.NODE_ENV);
 let server;
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   server = new ApolloServer({
     typeDefs,
     resolvers,
