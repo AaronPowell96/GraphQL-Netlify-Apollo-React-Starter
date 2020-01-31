@@ -89,11 +89,24 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  playground: true,
-  introspection: true
-});
+console.log(process.env.NODE_ENV);
+let server;
 
-exports.handler = server.createHandler();
+if (process.env.NODE_ENV === 'development') {
+  server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    playground: true,
+    introspection: true
+  });
+} else {
+  server = new ApolloServer({
+    typeDefs,
+    resolvers
+  });
+}
+exports.handler = server.createHandler({
+  cors: {
+    origin: '*'
+  }
+});

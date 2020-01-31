@@ -1,6 +1,7 @@
 [build]
   command = "yarn build" # the command you run to build this file
-  functions = "./lambda" # netlify-lambda builds to this folder AND Netlify reads functions from here
+  functions = "./graphql" # netlify-lambda builds to this folder AND Netlify reads functions from here
   publish = "build" # create-react-app builds to this folder, Netlify should serve all these files statically
-  [context.branch-deploy.environment]
-  NODE_ENV = "development"
+  environment = "development"
+[context.production]
+  environment = "development"
