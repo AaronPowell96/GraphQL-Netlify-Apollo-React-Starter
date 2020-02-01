@@ -1,5 +1,5 @@
 // src/lambda/graphql.js
-const { ApolloServer, gql } = require('apollo-server-lambda');
+const { ApolloServer, gql } = require('./node_modules/apollo-server-lambda');
 
 const typeDefs = gql`
   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
