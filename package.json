@@ -12,6 +12,7 @@
     "react-scripts": "^3.0.1"
   },
   "scripts": {
+    "prebuild": "node ./scripts/installer.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
