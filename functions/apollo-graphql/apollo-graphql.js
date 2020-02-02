@@ -1,16 +1,19 @@
 const { ApolloServer, gql } = require('apollo-server-lambda')
 
 const typeDefs = gql`
+  type Mutation {
+    addAuthor(name: String, id: Int, married: Boolean): Author
+  }
   type Query {
     hello: String
     allAuthors: [Author!]
     author(id: Int!): Author
-    authorByName(name: String!): Author
+    authorByName(name: String): [Author]
   } 
   type Author {
-    id: ID!
-    name: String!
-    married: Boolean!
+    id: ID
+    name: String
+    married: Boolean
   }
 `
 
@@ -31,11 +34,23 @@ const resolvers = {
     author: (root, args, context) => {
       return
     },
-    authorByName: (root, args, context) => {
-      console.log('hihhihi', args.name)
-      return authors.find(x => x.name === args.name) || 'NOTFOUND'
+    authorByName: (root, {name}, context) => {
+      const searchedName = name ? name.toLowerCase() : null 
+      const filteredByName = authors.filter(({name}) => name.toLowerCase().includes(searchedName));
+      return filteredByName.length > 0 ? filteredByName : authors
     }
-  }
+  },
+  Mutation:{
+    addAuthor: (root, args,) => {
+     const author = {
+       id: args.id,
+       name: args.name,
+       married: args.married
+     }
+     authors.push(author)
+     return author
+    }
+  },
 }
 
 const server = new ApolloServer({
@@ -43,4 +58,8 @@ const server = new ApolloServer({
   resolvers
 })
 
-exports.handler = server.createHandler()
+exports.handler = server.createHandler({
+  cors:{
+    origin: "*"
+  }
+})
